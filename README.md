@@ -150,28 +150,6 @@ As chaves são obtidas no [painel do EmailJS](https://dashboard.emailjs.com/). S
 
 O formulário de contato envia mensagens usando a **API do EmailJS** diretamente pelo navegador, sem backend próprio. O consumo é feito no serviço `EmailService` (`src/app/services/email.service.ts`).
 
-### Fluxo
-
-1. **Inicialização** — No construtor do `EmailService`, a SDK é inicializada com a chave pública:
-   ```ts
-   emailjs.init(environment.emailjs.publicKey);
-   ```
-
-2. **Envio** — O método `sendEmail(formData: ContactForm)` monta os parâmetros do template e chama a API:
-   - `serviceId` e `templateId` vêm do `environment` (configurados no painel do EmailJS).
-   - Os campos do formulário (nome, e-mail, mensagem) são mapeados para `templateParams` (`from_name`, `from_email`, `message`, `to_name`, `reply_to`).
-
-3. **Resposta** — A chamada `emailjs.send(...)` retorna uma Promise; o serviço considera sucesso quando `response.status === 200` e devolve `true` ou `false` para o componente, que usa signals para loading e feedback (sucesso/erro).
-
-### Onde é usado
-
-- O componente **Contact** (`pages/contact`) usa o `EmailService` ao submeter o formulário (Reactive Forms). Os dados validados são enviados via `sendEmail()`; o template do EmailJS define o assunto, o corpo do e-mail e o destinatário no painel.
-
-### Observações
-
-- A **Public Key** fica exposta no cliente; o EmailJS usa **Service ID** e **Template ID** e restringe no painel quais domínios podem enviar, mantendo o uso seguro para formulários de contato.
-- Para personalizar campos ou texto do e-mail, altere o template no [dashboard do EmailJS](https://dashboard.emailjs.com/) e, se necessário, os nomes das chaves em `templateParams` no `EmailService`.
-
 ---
 
 ## Scripts disponíveis
